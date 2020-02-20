@@ -220,13 +220,18 @@ func (APIHandler) GetLogLevels(ctx context.Context, in *voltha.LoggingComponent)
 	}
 
 	// now do the default log level
+	level, err := log.GetDefaultLogLevel()
+	if err != nil {
+		return &voltha.Loggings{}, err
+	}
 	logLevel := &voltha.Logging{
 		ComponentName: in.ComponentName,
 		PackageName:   "default",
-		Level:         voltha.LogLevel_Types(log.GetDefaultLogLevel())}
+		Level:         voltha.LogLevel_Types(level)}
 	logLevels.Items = append(logLevels.Items, logLevel)
 
 	return logLevels, nil
+
 }
 
 // ListCoreInstances returns details on the running core containers
